@@ -1,68 +1,28 @@
-# TASK 1
-Bat = r"""
-                 _..__.          .__.._
-               .^"-.._ '-(\__/)-' _..-"^.
-                      '-.' oo '.-'
-                         `-..-'  fsc  
-"""
-print(Bat)
-# TASK 2
-Acorn = r"""
-              _
-            _/-\_
-         .-`-:-:-`-.
-        /-:-:-:-:-:-\
-        \:-:-:-:-:-:/
-         |`       `|
-         |         |
-    jgs  `\       /'
-           `-._.-'
-              `
-"""
-print(Acorn)
-
-# TASK 3
-Anchor = r"""
-                   ___
-                  /   \
-                 |  o  |
-                  \   /
-           ________) (________
-          |                   |
-          '------.     .------'
-                  |   |
-                  |   |
-                  |   |
-                  |   |
-       /\         |   |         /\
-      /_ \        /   \        / _\
-        \ '.    .'     '.    .' /
-         \  '--'         '--'  /
-    jgs   '.                 .'
-            '._           _.'
-               `'-.   .-'`
-                   \ /
-                    `
-"""
-print(Anchor)
-
-# TASk 4
-Bug = r"""
-
- \(")/
- -( )-
- /(_)\
-             tre
-"""
-print(Bug)
-
-# TASK 5
-Apple = r"""
-        /)
-   .-"".L,""-.
-  ;       :.  :
-  (       7:  )
-   :         ;
-ctr "..-"-.."
-"""
-print(Apple)
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: pytest
+      id: pytest
+      uses: classroom-resources/autograding-python-grader@v1
+      with:
+        timeout: 10
+        max-score: 15
+        setup-command: ''
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        PYTEST_RESULTS: "${{steps.pytest.outputs.result}}"
+      with:
+        runners: pytest
